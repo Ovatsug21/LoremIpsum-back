@@ -48,7 +48,7 @@ namespace LoremIpsum_back.Controllers
             return enderecos;
         }
 
-        [HttpPost]
+        [HttpPost("{idCliente}")]
         public async Task<ActionResult<Endereco>> PostEndereco(int idCliente, Endereco endereco)
         {
             var clienteExistente = await dbcontext.Cliente.FindAsync(idCliente);
