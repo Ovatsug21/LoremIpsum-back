@@ -45,7 +45,7 @@ namespace LoremIpsum_back.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTarefa(int id, Endereco endereco)
+        public async Task<IActionResult> UpdateEndereco(int id, Endereco endereco)
         {
             if (id != endereco.Id)
             {

@@ -45,7 +45,7 @@ namespace LoremIpsum_back.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTarefa(int id, Cliente cliente)
+        public async Task<IActionResult> UpdateCliente(int id, Cliente cliente)
         {
             if (id != cliente.Id)
             {
