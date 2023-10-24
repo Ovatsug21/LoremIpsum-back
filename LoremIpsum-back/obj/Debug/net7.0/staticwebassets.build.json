@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "23O2vcgaxAPuawAZPjbVndHHt/M8laRKYYzwKUvd4Mo=",
+  "Source": "LoremIpsum-back",
+  "BasePath": "_content/LoremIpsum-back",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
