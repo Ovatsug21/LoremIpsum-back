@@ -23,8 +23,9 @@ namespace LoremIpsum_back.Controllers
             return enderecos;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Endereco>> GetEnderecoId(int id)
+        //Dando conflito
+        /*[HttpGet("{id}")]
+        public async Task<ActionResult<Endereco>> GetEnderecoIdCliente(int id)
         {
             var endereco = await dbcontext.Endereco.Include(e => e.Cliente)
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -35,6 +36,16 @@ namespace LoremIpsum_back.Controllers
             }
 
             return endereco;
+        }*/
+
+        [HttpGet("{idCliente}")]
+        public async Task<ActionResult<IEnumerable<Endereco>>> GetEnderecosCliente(int idCliente)
+        {
+            var enderecos = await dbcontext.Endereco.Include(e => e.Cliente)
+                .Where(e => e.IdCliente == idCliente)
+                .ToListAsync();
+
+            return enderecos;
         }
 
         [HttpPost]
