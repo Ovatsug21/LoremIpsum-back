@@ -13,6 +13,11 @@ builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(builde
 
 var app = builder.Build();
 
+app.UseCors(builder =>
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
