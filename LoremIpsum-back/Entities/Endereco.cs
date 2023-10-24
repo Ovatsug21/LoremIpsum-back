@@ -36,6 +36,6 @@ namespace LoremIpsum_back.Entities
         public int IdCliente { get; set; }
 
         [ForeignKey("IdCliente")]
-        public virtual Cliente Cliente{ get; set; }
+        public virtual Cliente Cliente { get; set; }
     }
 }

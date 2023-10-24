@@ -19,13 +19,15 @@ namespace LoremIpsum_back.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Endereco>>> GetEnderecos()
         {
-            return await dbcontext.Endereco.ToListAsync();
+            var enderecos = await dbcontext.Endereco.Include(e => e.Cliente).ToListAsync();
+            return enderecos;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Endereco>> GetEnderecoId(int id)
         {
-            var endereco = await dbcontext.Endereco.FindAsync(id);
+            var endereco = await dbcontext.Endereco.Include(e => e.Cliente)
+            .FirstOrDefaultAsync(e => e.Id == id);
 
             if (endereco == null)
             {
@@ -36,8 +38,17 @@ namespace LoremIpsum_back.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Endereco>> PostEndereco(Endereco endereco)
+        public async Task<ActionResult<Endereco>> PostEndereco(int idCliente, Endereco endereco)
         {
+            var clienteExistente = await dbcontext.Cliente.FindAsync(idCliente);
+            if (clienteExistente == null)
+            {
+                return NotFound();
+            }
+
+            endereco.IdCliente = idCliente;
+            endereco.Cliente = clienteExistente;
+
             dbcontext.Endereco.Add(endereco);
             await dbcontext.SaveChangesAsync();
 
@@ -49,10 +60,19 @@ namespace LoremIpsum_back.Controllers
         {
             if (id != endereco.Id)
             {
-                return BadRequest();
+                return BadRequest("O ID do endereço na URL deve corresponder ao ID do endereço no corpo da solicitação.");
             }
 
-            dbcontext.Entry(endereco).State = EntityState.Modified;
+            //Assegura que IdCliente não seja alterado durante o update
+            var confereEndereco = await dbcontext.Endereco.FindAsync(id);
+            if (confereEndereco == null)
+            {
+                return NotFound("Endereço não encontrado.");
+            }
+
+            endereco.IdCliente = confereEndereco.IdCliente;
+
+            dbcontext.Entry(confereEndereco).CurrentValues.SetValues(endereco);
 
             try
             {
@@ -62,7 +82,7 @@ namespace LoremIpsum_back.Controllers
             {
                 if (!EnderecoExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Endereço não encontrado.");
                 }
                 else
                 {
