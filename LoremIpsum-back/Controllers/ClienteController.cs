@@ -38,6 +38,11 @@ namespace LoremIpsum_back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
+            if (!IsValidSexo(cliente.Sexo))
+            {
+                return BadRequest("Sexo deve ser 'M' ou 'F'.");
+            }
+
             dbcontext.Cliente.Add(cliente);
             await dbcontext.SaveChangesAsync();
 
@@ -47,6 +52,11 @@ namespace LoremIpsum_back.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCliente(int id, Cliente cliente)
         {
+            if (!IsValidSexo(cliente.Sexo))
+            {
+                return BadRequest("Sexo deve ser 'M' ou 'F'.");
+            }
+
             if (id != cliente.Id)
             {
                 return BadRequest();
@@ -73,11 +83,6 @@ namespace LoremIpsum_back.Controllers
             return NoContent();
         }
 
-        private bool ClienteExists(int id)
-        {
-            return dbcontext.Cliente.Any(e => e.Id == id);
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
@@ -86,11 +91,24 @@ namespace LoremIpsum_back.Controllers
             {
                 return NotFound();
             }
-
+            
+            var enderecos = await dbcontext.Endereco.Where(e => e.IdCliente == id).ToListAsync();
+            dbcontext.Endereco.RemoveRange(enderecos);
+            
             dbcontext.Cliente.Remove(cliente);
             await dbcontext.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private bool ClienteExists(int id)
+        {
+            return dbcontext.Cliente.Any(e => e.Id == id);
+        }
+
+        private bool IsValidSexo(char sexo)
+        {
+            return sexo == 'M' || sexo == 'F';
         }
     }
 }

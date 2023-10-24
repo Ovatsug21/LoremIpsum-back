@@ -15,6 +15,7 @@ namespace LoremIpsum_back.Entities
         public DateTime DataNascimento { get; set; }
 
         [Required]
+        [RegularExpression("^[MF]$", ErrorMessage = "Sexo deve ser 'M' ou 'F'.")]
         public char Sexo { get; set; }
     }
 }

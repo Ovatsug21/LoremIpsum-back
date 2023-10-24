@@ -57,6 +57,11 @@ namespace LoremIpsum_back.Controllers
                 return NotFound();
             }
 
+            if (!IsValidTipo(endereco.Tipo))
+            {
+                return BadRequest("Tipo de endereço deve ser 'Comercial' ou 'Residencial'.");
+            }
+
             endereco.IdCliente = idCliente;
             endereco.Cliente = clienteExistente;
 
@@ -72,6 +77,11 @@ namespace LoremIpsum_back.Controllers
             if (id != endereco.Id)
             {
                 return BadRequest("O ID do endereço na URL deve corresponder ao ID do endereço no corpo da solicitação.");
+            }
+
+            if (!IsValidTipo(endereco.Tipo))
+            {
+                return BadRequest("Tipo de endereço deve ser 'Comercial' ou 'Residencial'.");
             }
 
             //Assegura que IdCliente não seja alterado durante o update
@@ -104,10 +114,6 @@ namespace LoremIpsum_back.Controllers
             return NoContent();
         }
 
-        private bool EnderecoExists(int id)
-        {
-            return dbcontext.Endereco.Any(e => e.Id == id);
-        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEndereco(int id)
@@ -124,5 +130,14 @@ namespace LoremIpsum_back.Controllers
             return NoContent();
         }
 
+        private bool EnderecoExists(int id)
+        {
+            return dbcontext.Endereco.Any(e => e.Id == id);
+        }
+
+        private bool IsValidTipo(string tipo)
+        {
+            return tipo == "Comercial" || tipo == "Residencial";
+        }
     }
 }

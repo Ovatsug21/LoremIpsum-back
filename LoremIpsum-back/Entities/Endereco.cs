@@ -8,7 +8,8 @@ namespace LoremIpsum_back.Entities
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [MaxLength(20), Required(AllowEmptyStrings = false)]
+        [MaxLength(20), Required(AllowEmptyStrings = false),
+        RegularExpression("^(Comercial|Residencial)$", ErrorMessage = "Tipo de endereço deve ser 'Comercial' ou 'Residencial'.")]
         public string Tipo { get; set; }
         
         [MaxLength(8), Required(AllowEmptyStrings = false)]
